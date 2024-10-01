@@ -1,0 +1,4 @@
+node_modules
+.prettierrc
+.idea
+package-lock.json
