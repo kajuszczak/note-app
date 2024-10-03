@@ -13,6 +13,7 @@ const emptyListInfo = document.querySelector('.list_empty');
 const addNewHeading = document.querySelector('.add_new_heading');
 const editHeading = document.querySelector('.edit_heading');
 const editSaveBtn = document.querySelector('.edit_save_btn');
+const searchInput = document.querySelector('.header__search');
 
 // switch (state) {
 //   case 'empty':
@@ -42,7 +43,9 @@ function formatDate(date) {
 }
 const dateOfCreation = formatDate(new Date());
 
-document.addEventListener('DOMContentLoaded', loadList);
+document.addEventListener('DOMContentLoaded', loadList(notesList));
+
+searchInput.addEventListener('input', filterNotes);
 
 saveNoteBtn.addEventListener('click', () => {
   const newNoteData = {
@@ -54,7 +57,7 @@ saveNoteBtn.addEventListener('click', () => {
 
   notesList.push(newNoteData);
   localStorage.setItem('notes', JSON.stringify(notesList));
-  loadList();
+  loadList(notesList);
 });
 
 editSaveBtn.addEventListener('click', (event) => {
@@ -74,7 +77,7 @@ editSaveBtn.addEventListener('click', (event) => {
   notesList[index] = { ...notesList[index], ...editedNote };
 
   localStorage.setItem('notes', JSON.stringify(notesList));
-  loadList();
+  loadList(notesList);
 });
 
 addNoteBtns.forEach((btn) =>
@@ -111,7 +114,7 @@ cancelNewNoteBtn.addEventListener('click', () => {
   noteEditor.style.display = 'none';
 });
 
-function loadList() {
+function loadList(notes) {
   if (notesList.length > 0) {
     emptyListInfo.style.display = 'none';
     noteEditor.style.display = 'none';
@@ -121,9 +124,8 @@ function loadList() {
     noteEditor.style.display = 'none';
     addNewBtn.style.display = 'none';
   }
-  console.log(notesList);
   listContainer.innerHTML = '';
-  notesList.forEach((note, index) => {
+  notes.forEach((note, index) => {
     const noteContainer = document.createElement('section');
     noteContainer.classList.add('list__item');
 
@@ -172,8 +174,18 @@ function deleteNote(id) {
   if (noteIndex !== -1) {
     notesList.splice(noteIndex, 1);
     localStorage.setItem('notes', JSON.stringify(notesList));
-    loadList();
+    loadList(notesList);
   } else {
     console.log('Note not found');
   }
+}
+
+function filterNotes() {
+  const searchTerm = searchInput.value.toLowerCase();
+
+  const filteredNotes = notesList.filter((note) =>
+    note.title.toLowerCase().includes(searchTerm)
+  );
+
+  loadList(filteredNotes);
 }
