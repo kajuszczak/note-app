@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Notes</title>
+    <link rel="icon" href="assets/favicon-32x32.png" type="image/png" />
     <link rel="stylesheet" href="css/styles.css" />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -23,7 +24,7 @@
       >
 
       <span class="header__input_container">
-        <i class="material-icons">search</i>
+        <i class="material-icons search_icon">search</i>
         <input
           class="header__search input__text_field"
           placeholder="Search notes"
@@ -33,52 +34,63 @@
     </header>
 
     <main>
-      <section class="list list__container">
-        <!--        No results page -->
-        <div class="list__empty">
-          <i class="material-icons">info_outline</i>
-          <h5 class="main__no_results__heading">No notes yet</h5>
-          <p class="main__no_results__paragraph">
-            Add a note to keep track of your learnings
-          </p>
-        </div>
-        <button class="list__add_note_btn btn__secondary">
+      <div class="list_empty">
+        <i class="material-icons">info_outline</i>
+        <h5 class="main__no_results__heading">No notes yet</h5>
+        <p class="main__no_results__paragraph">
+          Add a note to keep track of your learnings
+        </p>
+        <button class="list__add_note_btn add_note_btn btn btn__secondary">
           <i class="material-icons">note_add</i>
           Add Note
           <!--          change to 'Add new' when primary-->
         </button>
-        <button class="list__add_note_btn btn__primary">
-          Add new
-          <!--          change to 'Add new' when primary-->
-        </button>
+      </div>
+      <button class="list__add_note_btn add_new_btn btn btn__primary">
+        Add new
+        <!--          change to 'Add new' when primary-->
+      </button>
+      <form class="new_list_item" data-form-id="">
+        <span>
+          <h5 class="add_new_heading">Add new note</h5>
+          <h5 class="edit_heading">Edit note</h5>
+          <button class="list_item__cancel_btn btn__secondary btn">
+            Cancel
+          </button>
+        </span>
 
-        <!--          List item-->
-        <article class="list__item">
-          <span>
-            <!--              Add if edition mode-->
-            <button class="list__item__cancel_btn">Cancel</button>
+        <input
+          type="text"
+          name="title"
+          class="list_item__heading input__text_field"
+          placeholder="Note title"
+        />
+        <textarea
+          name="note"
+          class="list_item__body input__text_field"
+          placeholder="Your note"
+        ></textarea>
+        <button
+          type="button"
+          class="list_item__save_btn btn btn__primary"
+        >Save</button>
+        <button
+          type="button"
+          class="edit_save_btn btn btn__primary"
+        >Save</button>
+      </form>
+      <div class="list list__container"></div>
 
-            <!--              Add if read mode-->
-            <button><i class="material-icons">edit_note</i></button>
-            <button><i class="material-icons">delete_outline</i></button>
-          </span>
-
-          <header class="list__item__heading">Note title</header>
-          <p class="list__item__body">Note Body</p>
-          <p class="list__item__date">Date of edition</p>
-          <button class="list__item__save_btn">Save</button>
-        </article>
-
-        <!--          Delete modal-->
-        <div class="delete">
-          <h5 class="delete__heading">Delete Note //name of the note//</h5>
-          <p class="delete__body">Are you sure you want to delete this note?</p>
-          <span class="delete__btns">
-            <button class="delete__cancel">Cancel</button>
-            <button class="delete__submit">Delete</button>
-          </span>
-        </div>
-      </section>
+      <!--          Delete modal-->
+      <!--      <section class="delete_modal">-->
+      <!--        <h5 class="delete__heading">Delete Note //name of the note//</h5>-->
+      <!--        <p class="delete__body">Are you sure you want to delete this note?</p>-->
+      <!--        <span class="delete__btns">-->
+      <!--          <button class="delete__cancel btn btn__secondary">Cancel</button>-->
+      <!--          <button class="delete__submit btn btn__primary">Delete</button>-->
+      <!--        </span>-->
+      <!--      </section>-->
     </main>
+    <script src="js/app.js"></script>
   </body>
 </html>
