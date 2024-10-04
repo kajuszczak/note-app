@@ -12,70 +12,13 @@ const cancelNewNoteBtn = document.querySelector('.list_item__cancel_btn');
 const emptyListInfo = document.querySelector('.list_empty');
 const addNewHeading = document.querySelector('.add_new_heading');
 const editHeading = document.querySelector('.edit_heading');
-const editSaveBtn = document.querySelector('.edit_save_btn');
+const searchInput = document.querySelector('.header__search');
+const modal = document.querySelector('.modal');
+const confirmDeletionBtn = document.querySelector('.delete__submit');
 
-// switch (state) {
-//   case 'empty':
-//     emptyListInfo.style.display = 'flex';
-//     noteEditor.style.display = 'none';
-//     addNewBtn.style.display = 'none';
-//     break;
-//   case 'list':
-//     emptyListInfo.style.display = 'none';
-//     noteEditor.style.display = 'none';
-//     addNewBtn.style.display = 'flex';
-//     break;
-//   case 'create':
-//     emptyListInfo.style.display = 'none';
-//     noteEditor.style.display = 'flex';
-//     addNewBtn.style.display = 'none';
-//     break;
-//   case 'edit':
-//     emptyListInfo.style.display = 'none';
-//     noteEditor.style.display = 'flex';
-//     addNewBtn.style.display = 'none';
-//     break;
-// }
+document.addEventListener('DOMContentLoaded', loadList(notesList));
 
-function formatDate(date) {
-  return `${date.toLocaleDateString('en-US', { month: 'long' })} ${date.getDate()}`;
-}
-const dateOfCreation = formatDate(new Date());
-
-document.addEventListener('DOMContentLoaded', loadList);
-
-saveNoteBtn.addEventListener('click', () => {
-  const newNoteData = {
-    title: titleInput.value,
-    content: noteInput.value,
-    date: dateOfCreation,
-    id: Math.floor(Math.random() * 90000),
-  };
-
-  notesList.push(newNoteData);
-  localStorage.setItem('notes', JSON.stringify(notesList));
-  loadList();
-});
-
-editSaveBtn.addEventListener('click', (event) => {
-  const editedNoteId = parseInt(event.srcElement.form.dataset.formId);
-
-  let editedNote = notesList.find((note) => note.id === editedNoteId);
-
-  editedNote = {
-    title: titleInput.value,
-    content: noteInput.value,
-    date: dateOfCreation,
-    id: editedNoteId,
-  };
-
-  const index = notesList.findIndex((note) => note.id === editedNoteId);
-
-  notesList[index] = { ...notesList[index], ...editedNote };
-
-  localStorage.setItem('notes', JSON.stringify(notesList));
-  loadList();
-});
+searchInput.addEventListener('input', filterNotes);
 
 addNoteBtns.forEach((btn) =>
   btn.addEventListener('click', () => {
@@ -87,52 +30,99 @@ addNoteBtns.forEach((btn) =>
   })
 );
 
-function openNoteEditor(data) {
-  noteEditor.style.display = 'flex';
-  addNewBtn.style.display = 'none';
-  noteEditor.setAttribute('data-form-id', data.id);
-  if (data.id) {
-    addNewHeading.style.display = 'none';
-    saveNoteBtn.style.display = 'none';
-    editSaveBtn.style.display = 'flex';
-    editHeading.style.display = 'flex';
-    titleInput.value = data.title;
-    noteInput.value = data.content;
+saveNoteBtn.addEventListener('click', (event) => {
+  const editedNoteId = parseInt(event.srcElement.form.dataset.formId);
+
+  if (editedNoteId) {
+    let editedNote = notesList.find((note) => note.id === editedNoteId);
+
+    editedNote = {
+      title: titleInput.value,
+      content: noteInput.value,
+      date: new Date(),
+      id: editedNoteId,
+    };
+
+    const index = notesList.findIndex((note) => note.id === editedNoteId);
+
+    notesList[index] = { ...notesList[index], ...editedNote };
   } else {
-    editHeading.style.display = 'none';
-    editSaveBtn.style.display = 'none';
+    const newNoteData = {
+      title: titleInput.value,
+      content: noteInput.value,
+      date: new Date(),
+      id: Math.floor(Math.random() * 90000),
+    };
+
+    notesList.push(newNoteData);
   }
-}
+
+  localStorage.setItem('notes', JSON.stringify(notesList));
+  loadList(notesList);
+});
 
 cancelNewNoteBtn.addEventListener('click', () => {
   if (notesList.length === 0) {
     emptyListInfo.style.display = 'flex';
   }
   noteEditor.style.display = 'none';
+  loadList(notesList);
 });
 
-function loadList() {
+confirmDeletionBtn.addEventListener('click', (event) => {
+  const noteId = parseInt(event.srcElement.dataset.formId);
+  modal.style.display = 'none';
+  deleteNote(noteId);
+});
+
+function openNoteEditor(data) {
+  noteEditor.style.display = 'flex';
+  addNewBtn.style.display = 'none';
+  noteEditor.setAttribute('data-form-id', data.id);
+
+  if (data.id) {
+    addNewHeading.style.display = 'none';
+    editHeading.style.display = 'flex';
+    titleInput.value = data.title;
+    noteInput.value = data.content;
+  } else {
+    editHeading.style.display = 'none';
+    addNewHeading.style.display = 'flex';
+  }
+}
+
+function loadList(notes) {
   if (notesList.length > 0) {
+    searchInput.disabled = false;
     emptyListInfo.style.display = 'none';
     noteEditor.style.display = 'none';
+    noteEditor.reset();
     addNewBtn.style.display = 'flex';
   } else {
+    searchInput.disabled = true;
     emptyListInfo.style.display = 'flex';
     noteEditor.style.display = 'none';
+    noteEditor.reset();
     addNewBtn.style.display = 'none';
   }
-  console.log(notesList);
   listContainer.innerHTML = '';
-  notesList.forEach((note, index) => {
+  notes.sort((a, b) => a.date - b.date);
+  notes.forEach((note, index) => {
     const noteContainer = document.createElement('section');
     noteContainer.classList.add('list__item');
 
+    const dateOfCreation = `${new Date(note.date).toLocaleDateString('en-US', { month: 'long' })} ${new Date(note.date).getDate()}`;
+
     noteContainer.innerHTML = `
-      <h5 className="list_item__heading">${note.title}</h5>
-      <p className="list_item__body">${note.content}</p>
-      <p className="list_item__date">${note.date}</p>
+      <div class="list_item__body_container" style="flex-basis: 100%">
+        <p class="list_item__body">${note.content}</p>
+        <p class="list_item__date">${dateOfCreation}</p>
+      </div>
     `;
 
+    const noteTitle = document.createElement('h5');
+    noteTitle.className = 'list_item__heading';
+    noteTitle.innerHTML = `${note.title}`;
     const btnContainer = document.createElement('span');
     const editButton = document.createElement('button');
     editButton.className = 'btn edit_btn';
@@ -151,29 +141,45 @@ function loadList() {
     });
 
     deleteButton.addEventListener('click', () => {
-      deleteNote(id);
+      modal.style.display = 'flex';
+      document
+        .querySelector('.delete__submit')
+        .setAttribute('data-form-id', id);
     });
 
     btnContainer.append(editButton, deleteButton);
 
-    noteContainer.prepend(btnContainer);
+    noteContainer.prepend(noteTitle, btnContainer);
     listContainer.prepend(noteContainer);
   });
 }
 
 function editNote(id) {
   const filteredNote = notesList.find((note) => note.id === id);
+
   openNoteEditor(filteredNote);
 }
 
 function deleteNote(id) {
   const noteIndex = notesList.findIndex((note) => note.id === id);
-
   if (noteIndex !== -1) {
     notesList.splice(noteIndex, 1);
     localStorage.setItem('notes', JSON.stringify(notesList));
-    loadList();
+    loadList(notesList);
   } else {
     console.log('Note not found');
   }
+}
+
+function filterNotes() {
+  const searchTerm = searchInput.value.toLowerCase();
+  const filteredNotes = notesList.filter((note) =>
+    note.title.toLowerCase().includes(searchTerm)
+  );
+
+  loadList(filteredNotes);
+}
+
+function closeModal() {
+  modal.style.display = 'none';
 }
