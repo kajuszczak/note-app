@@ -94,10 +94,10 @@ Notes are stored as an array of objects in the browser's `localStorage`. Each ob
 ```
 .
 ├── css
-    ├── styles.css          # Styles for the application
-    ├── variables.css      # Variables for styling
+    ├── styles.css     # Styles for the application
+    ├── variables.css  # Variables for styling
 ├──js
-    ├── app.js             # Main JavaScript file for app logic
+    ├── app.js         # Main JavaScript file for app logic
 ├── index.html         # Main HTML file for the app
 └── README.md          # This file
 ```
