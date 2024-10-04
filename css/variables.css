@@ -21,6 +21,7 @@
     --text-btn: #0f75b8;
 
     --font-black: #1b1c1e;
+    --font-black-2: #3b3c3e;
     --font-gray: #5b5c5e;
     --font-white: #ffffff;
 
@@ -36,4 +37,6 @@
 
     /*    border-radius*/
     --border-radius: 12px;
+
+    --mobile-width-breakpoint: 376px;
 }
