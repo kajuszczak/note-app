@@ -115,7 +115,7 @@ function loadList(notes) {
     addNewBtn.style.display = 'none';
   }
   listContainer.innerHTML = '';
-  notes.sort((a, b) => a.date - b.date);
+  notes.sort((a, b) => new Date(a.date) - new Date(b.date));
   notes.forEach((note, index) => {
     const noteContainer = document.createElement('section');
     noteContainer.classList.add('list__item');
