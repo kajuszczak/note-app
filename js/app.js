@@ -18,6 +18,14 @@ const confirmDeletionBtn = document.querySelector('.delete__submit');
 
 document.addEventListener('DOMContentLoaded', loadList(notesList));
 
+document.querySelectorAll('.note_input').forEach((input) => {
+  input.addEventListener('input', (event) => {
+    if (event.srcElement.value !== '') {
+      saveNoteBtn.disabled = false;
+    }
+  });
+});
+
 searchInput.addEventListener('input', filterNotes);
 
 addNoteBtns.forEach((btn) =>
@@ -79,6 +87,7 @@ function openNoteEditor(data) {
   noteEditor.style.display = 'flex';
   addNewBtn.style.display = 'none';
   noteEditor.setAttribute('data-form-id', data.id);
+  saveNoteBtn.disabled = true;
 
   if (data.id) {
     addNewHeading.style.display = 'none';

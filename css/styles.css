@@ -83,6 +83,10 @@ main {
   &:active {
     background-color: var(--button-primary-active);
   }
+
+  &:disabled {
+    pointer-events: none;
+  }
 }
 
 .btn__secondary {

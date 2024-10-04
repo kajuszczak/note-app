@@ -48,19 +48,19 @@ A simple note-taking application that allows users to create, edit, delete, and 
 
 ### Add a new note:
 
-- Click the "Add New Note" button.
+- Click the `Add Note` button.
 - Enter a title and description.
-- Click "Save" to add the note.
+- Click `Save` to add the note.
 
 ### Edit an existing note:
 
-- Click the "Edit" button next to any note.
+- Click the `Edit` button next to any note.
 - Modify the title and description in the form.
-- Click "Save" to update the note.
+- Click `Save` to update the note.
 
 ### Delete a note:
 
-- Click the "Delete" button to remove a note from the list.
+- Click the `Delete` button to remove a note from the list.
 
 ### Search notes:
 
@@ -68,7 +68,7 @@ A simple note-taking application that allows users to create, edit, delete, and 
 
 ## How to Create and Edit Notes
 
-The "Add new" button triggers a form to appear where the user can input the note's title and content. The notes are displayed in a list where each note has an "Edit" and "Delete" button. Clicking the "Edit" button will load the note's content into the form for modification. Upon saving, the note is updated in `localStorage`, and the updated note is displayed in the list.
+The `Add new` button triggers a form to appear where the user can input the note's title and content. The notes are displayed in a list where each note has an `Edit` and `Delete` button. Clicking the `Edit` button will load the note's content into the form for modification. Upon saving, the note is updated in `localStorage`, and the updated note is displayed in the list.
 
 ## Notes Storage in `localStorage`
 
